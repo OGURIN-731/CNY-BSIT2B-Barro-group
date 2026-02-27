@@ -1,32 +1,32 @@
 <?php
-/* John Mcnesse F. Bañganan
-   Gerald Clarence Barro
-   Nick Andrei Butuhan */
+/* Group Members
+John Mcnesse F. Bañganan
+Gerald Clarence Barro
+Nick Andrei Butuhan */
 
 $resultOutput = "";
 $fortuneMessage = "";
 
+/* get user inputs safely */
 $foodExpenses = intval($_POST['foodExpenses'] ?? 0);
 $transportExpenses = intval($_POST['transportExpenses'] ?? 0);
+$luckyNumber = intval($_POST['luckyNumber'] ?? 0);
 
 $isDragonYear = isset($_POST['dragonYear']);
 
+/* run only when reveal button is pressed */
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // RANDOMLY GENERATE ANGPAO VALUES
+    /* generate random angpao values */
     $angpao1 = rand(500,3000);
     $angpao2 = rand(500,3000);
     $angpao3 = rand(500,3000);
 
-    // RANDOM LUCKY NUMBER
-    $luckyNumber = rand(1,10);
-
-    // ARITHMETIC OPERATORS
+    /* arithmetic */
     $totalAngPao = $angpao1 + $angpao2 + $angpao3;
-
     $remainingMoney = $totalAngPao - $foodExpenses - $transportExpenses;
 
-    // Dragon year multiplier
+    /* dragon bonus */
     if ($isDragonYear) {
         $remainingMoney *= 2;
         $dragonMsg = "🐉 Dragon Bonus Applied!";
@@ -34,24 +34,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $dragonMsg = "No Dragon Bonus.";
     }
 
-    // ASSIGNMENT OPERATORS
+    /* assignment */
     $remainingMoney += 500;
     $remainingMoney -= 200;
 
-    // COMPARISON OPERATORS
+    /* comparison */
     $isRich = ($remainingMoney > 5000);
     $isLuckyEight = ($luckyNumber == 8);
     $expensesTooHigh = ($foodExpenses + $transportExpenses > $totalAngPao);
 
-    // LOGICAL OPERATORS
+    /* logical */
     $superLucky = ($isRich && $isLuckyEight);
     $festivalLucky = ($isRich || $isDragonYear);
 
-    // INCREMENT / DECREMENT
+    /* increment / decrement */
     $luckyNumber++;
     $foodExpenses--;
 
-    // RANDOM FORTUNE ARRAY
+    /* random fortune */
     $fortunes = [
         "✨ Prosperity follows your hard work.",
         "🐉 Fortune favors the brave this year.",
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $fortuneMessage = $fortunes[array_rand($fortunes)];
 
-    // OUTPUT
+    /* build output */
     $resultOutput .= "🎉 Happy Chinese New Year!<br>";
 
     $resultOutput .= "Generated Ang Pao 1: ₱$angpao1<br>";
@@ -87,11 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($expensesTooHigh)
         $resultOutput .= "⚠ Expenses exceeded earnings.<br>";
 
-    if(isset($_POST['reset'])){
-        $_POST = [];
-        $resultOutput = "";
-    }
-
     $resultOutput .= "Updated Lucky Number: $luckyNumber<br>";
     $resultOutput .= "Adjusted Food Expense: ₱$foodExpenses<br>";
 }
@@ -103,7 +98,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <title>🐉 CNY Activity</title>
 
 <style>
-/* DESIGN UNCHANGED */
+
+/* original design */
 
 body{
 margin:0;
@@ -176,7 +172,9 @@ padding:30px;
 border-radius:20px;
 background:rgba(0,0,0,.55);
 backdrop-filter:blur(14px);
-box-shadow:0 0 30px rgba(255,215,0,.7), inset 0 0 20px rgba(255,120,0,.3);
+box-shadow:
+0 0 30px rgba(255,215,0,.7),
+inset 0 0 20px rgba(255,120,0,.3);
 }
 
 h2{
@@ -223,6 +221,34 @@ line-height:1.8;
 color:gold;
 font-size:18px;
 }
+
+/* dragon background */
+
+.dragon-silhouette{
+position:fixed;
+inset:0;
+pointer-events:none;
+z-index:-1;
+background:url("dragon_silhouette.png") center/contain no-repeat;
+opacity:0;
+transition:opacity .6s ease;
+filter:brightness(0) drop-shadow(0 0 30px rgba(255,0,0,.6));
+}
+
+/* confetti */
+
+.confetti{
+position:fixed;
+width:8px;
+height:8px;
+top:-10px;
+animation:fall linear forwards;
+}
+
+@keyframes fall{
+to{transform:translateY(110vh) rotate(720deg);}
+}
+
 </style>
 </head>
 
@@ -231,6 +257,9 @@ font-size:18px;
 <div class="particles" id="particles"></div>
 
 <script>
+
+/* floating particles */
+
 const container = document.getElementById("particles");
 
 for(let i=0;i<40;i++){
@@ -240,18 +269,23 @@ p.style.animationDuration=(6+Math.random()*6)+"s";
 p.style.animationDelay=Math.random()*5+"s";
 container.appendChild(p);
 }
+
 </script>
+
+<div id="dragonSilhouette" class="dragon-silhouette"></div>
 
 <div class="container">
 
 <h2>2026 Fire Horse Lucky Calculator</h2>
 
-<form method="POST">
+<form method="POST" id="fortuneForm">
 
 <input type="number" name="foodExpenses" placeholder="🥟 Food Expenses" required>
 <input type="number" name="transportExpenses" placeholder="🚕 Transport Expenses" required>
+<input type="number" name="luckyNumber" placeholder="🎯 Lucky Number" required>
 
 <br>
+
 <label>
 🐉 Activate Dragon Bonus Mode
 <input type="checkbox" name="dragonYear">
@@ -259,12 +293,14 @@ container.appendChild(p);
 
 <button type="submit">🎆 Reveal My Fortune</button>
 <br>
-<button type="submit" name="reset">🔄 Reset All</button>
+
+<!-- reset no longer submits -->
+<button type="button" id="resetBtn">🔄 Reset All</button>
 
 </form>
 
 <?php if($resultOutput!=""): ?>
-<div class="result">
+<div class="result" id="resultBox">
 <hr>
 <?php
 echo $resultOutput;
@@ -275,6 +311,63 @@ echo "<br><strong>$fortuneMessage</strong>";
 <?php endif; ?>
 
 </div>
+
+<script>
+
+/* dragon toggle */
+
+const dragonCheckbox = document.querySelector("input[name='dragonYear']");
+const dragonSilhouette = document.getElementById("dragonSilhouette");
+
+dragonCheckbox.addEventListener("change", () => {
+dragonSilhouette.style.opacity = dragonCheckbox.checked ? "0.35" : "0";
+});
+
+<?php if($isDragonYear && $resultOutput!=""): ?>
+dragonSilhouette.style.opacity="0.5";
+<?php endif; ?>
+
+
+/* confetti when result appears */
+
+<?php if($resultOutput!=""): ?>
+
+for(let i=0;i<120;i++){
+
+let confetti=document.createElement("div");
+confetti.className="confetti";
+
+confetti.style.left=Math.random()*100+"vw";
+confetti.style.backgroundColor=["gold","orange","red","yellow"][Math.floor(Math.random()*4)];
+confetti.style.animationDuration=(3+Math.random()*3)+"s";
+
+document.body.appendChild(confetti);
+
+setTimeout(()=>confetti.remove(),6000);
+
+}
+
+<?php endif; ?>
+
+
+/* reset button logic */
+
+document.getElementById("resetBtn").addEventListener("click",function(){
+
+document.getElementById("fortuneForm").reset();
+
+dragonSilhouette.style.opacity=0;
+
+/* remove result box */
+let result=document.getElementById("resultBox");
+if(result) result.remove();
+
+/* remove confetti */
+document.querySelectorAll(".confetti").forEach(c=>c.remove());
+
+});
+
+</script>
 
 </body>
 </html>

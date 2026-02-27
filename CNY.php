@@ -6,10 +6,10 @@
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Randomized Ang Pao (500 - 3000 pesos each)
-    $angpao1 = rand(500, 3000);
-    $angpao2 = rand(500, 3000);
-    $angpao3 = rand(500, 3000);
-
+    $angpao1 = rand(20, 1000);
+    $angpao2 = rand(20, 1000);
+    $angpao3 = rand(20, 1000);
+    
     $foodExpenses = $_POST['foodExpenses'];
     $luckyNumber = $_POST['luckyNumber'];
     $transportExpense = $_POST['transportExpense'];

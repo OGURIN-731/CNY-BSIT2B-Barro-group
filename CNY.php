@@ -1,7 +1,6 @@
 <?php
 
 // Chinese New Year PHP Activity
-// Back-End Processing Only
 
 // Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

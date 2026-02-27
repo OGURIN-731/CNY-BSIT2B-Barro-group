@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     echo "Total Ang Pao: ₱$totalAngPao<br>";
     echo "Remaining After Expenses: ₱$remainingMoney<br>";
+    echo "Transportation Expense: ₱$transportExpense<br>";
 
     if ($isDragonYear) {
         echo "🐉 Dragon Bonus Applied!<br>";

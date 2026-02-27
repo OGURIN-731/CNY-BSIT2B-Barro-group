@@ -5,7 +5,7 @@
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Randomized Ang Pao (500 - 3000 pesos each)
+    // Randomized Ang Pao (20 - 1000 pesos each)
     $angpao1 = rand(20, 1000);
     $angpao2 = rand(20, 1000);
     $angpao3 = rand(20, 1000);
@@ -33,9 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $isLuckyNumberEight = $luckyNumber == 8;
     $expensesHigher = $foodExpenses > $totalAngPao;
 
-    // Logical Operators
-    $superLucky = ($remainingMoney > 5000) && ($luckyNumber == 8);
-    $luckyCondition = ($remainingMoney > 5000) || ($isDragonYear);
+    // Logical Operators (UPDATED TO USE VARIABLES)
+    $superLucky = $isRich && $isLuckyNumberEight;
+    $luckyCondition = $isRich || $isDragonYear;
     $notDragonYear = !$isDragonYear;
 
     // Increment / Decrement

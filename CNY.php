@@ -1,87 +1,56 @@
 <?php
 
 // Chinese New Year PHP Activity
+// Back-End Processing Only
 
-// Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Variables to store user input
-    $angpao1 = $_POST['angpao1'];
-    $angpao2 = $_POST['angpao2'];
-    $angpao3 = $_POST['angpao3'];
+    // Randomized Ang Pao (500 - 3000 pesos each)
+    $angpao1 = rand(500, 3000);
+    $angpao2 = rand(500, 3000);
+    $angpao3 = rand(500, 3000);
+
     $foodExpenses = $_POST['foodExpenses'];
     $luckyNumber = $_POST['luckyNumber'];
     $transportExpense = $_POST['transportExpense'];
 
-    // Checkbox returns value only if checked
     $isDragonYear = isset($_POST['isDragonYear']); 
 
-    // ARITHMETIC OPERATORS
-
-
-    // (Addition) → Compute total Ang Pao
+    // Arithmetic Operators
     $totalAngPao = $angpao1 + $angpao2 + $angpao3;
-
-    // (Subtraction) → Subtract food expenses
     $remainingMoney = $totalAngPao - $foodExpenses;
 
-    // (Multiplication) → Double money if Dragon Year
     if ($isDragonYear) {
         $remainingMoney = $remainingMoney * 2;
     }
 
-    // B. ASSIGNMENT OPERATORS
-
-    // += (Add and assign) → Add bonus 500
+    // Assignment Operators
     $remainingMoney += 500;
-
-    // -= (Subtract and assign) → Deduct transportation expense
     $remainingMoney -= $transportExpense;
 
-    
-    // C. COMPARISON OPERATORS
-    
-
-    // > (Greater than) → Check if money is greater than 5000
+    // Comparison Operators
     $isRich = $remainingMoney > 5000;
-
-    // == (Equal to) → Check if lucky number equals 8
     $isLuckyNumberEight = $luckyNumber == 8;
-
-    // > (Compare expenses and total Ang Pao)
     $expensesHigher = $foodExpenses > $totalAngPao;
 
-    
-    // D. LOGICAL OPERATORS
-    
-
-    // AND (&&) → Money > 5000 AND Lucky number is 8
+    // Logical Operators
     $superLucky = ($remainingMoney > 5000) && ($luckyNumber == 8);
-
-    // OR (||) → Money > 5000 OR Dragon Year
     $luckyCondition = ($remainingMoney > 5000) || ($isDragonYear);
-
-    // NOT (!) → Check if NOT Dragon Year
     $notDragonYear = !$isDragonYear;
 
-    
-    // E. INCREMENT / DECREMENT
-    
-
-    // ++ (Increment) → Increase lucky number
+    // Increment / Decrement
     $luckyNumber++;
-
-    // -- (Decrement) → Reduce food expenses
     $foodExpenses--;
 
-    
-    // DISPLAY RESULTS
-    
-
+    // Display Results
     echo "<h2>🎉 Happy Chinese New Year! 🎉</h2><br>";
 
-    echo "Total Ang Pao: ₱" . $totalAngPao . "<br>";
-    echo "Remaining After Expenses: ₱" . $remainingMoney . "<br>";
+    echo "Ang Pao 1: ₱$angpao1<br>";
+    echo "Ang Pao 2: ₱$angpao2<br>";
+    echo "Ang Pao 3: ₱$angpao3<br><br>";
+
+    echo "Total Ang Pao: ₱$totalAngPao<br>";
+    echo "Remaining After Expenses: ₱$remainingMoney<br>";
 
     if ($isDragonYear) {
         echo "🐉 Dragon Bonus Applied!<br>";
@@ -101,15 +70,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Warning: Your expenses are higher than your Ang Pao!<br>";
     }
 
-    echo "<br>Updated Lucky Number (after increment): " . $luckyNumber . "<br>";
-    echo "Updated Food Expenses (after decrement): ₱" . $foodExpenses . "<br>";
+    echo "<br>Updated Lucky Number: $luckyNumber<br>";
+    echo "Updated Food Expenses: ₱$foodExpenses<br>";
 
-    echo "<br><strong>Final Computation: ₱" . $remainingMoney . "</strong><br>";
+    echo "<br><strong>Final Computation: ₱$remainingMoney</strong><br>";
 
-    
     // Random Fortune Generator
-    
-
     $fortunes = array(
         "Great wealth is coming your way!",
         "A new opportunity will bring prosperity.",
@@ -118,10 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         "Unexpected money is on its way!"
     );
 
-    // array_rand() → Picks random index
     $randomIndex = array_rand($fortunes);
 
     echo "<br>Your Lucky Fortune: " . $fortunes[$randomIndex] . "<br>";
-
 }
 ?>
